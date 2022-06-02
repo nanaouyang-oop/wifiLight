@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <title>WIFI灯控制端口</title>
+  <script src="./jquery.js"></script>
+  <style>
+    #outer{
+      margin: 0 auto;
+      text-align: center;
+    }
+    .button {
+      width: 300px;
+      height: 300px;
+      font-size: 50px;
+      border-radius: 50%;
+      outline: none;
+      background-color:#ffffff;
+    }
+
+    .button:active {
+      color: #FFFF00;
+      background-color: #000000;
+    }
+
+    .LED {
+      font-size: 50px;
+    }
+
+    .jpg {
+      height: 540px;
+      width: 540px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="outer">
+    <div>
+      <a href="https://www.iqiyi.com/v_19rrje1hao.html?vfm=2008_aldbd&fv=p_02_01" target="_blank"><img style="width:600px; height:375px;"
+          src="./img/TheCreationofAdam.jpg" id="god"></a>
+    </div>
+
+    <div>
+
+      
+      <button class="button" type="button" onclick="sendData(1)">神说要有光</button>
+      <span class="LED">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+      <button class="button" type="button" onclick="sendData(0)">神说太亮了</button>
+      
+    </div>
+    <span class="LED">LED灯状态 : <span id="LEDState">正在连接</span></span>
+    <p><img class="jpg" src="img/TigaDark.jpg" id="myimg" /></p>
+
+    
+    <div>
+
+      <script>
+        function sendData(led) {
+          var xhttp = new XMLHttpRequest();
+          xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+              document.getElementById("LEDState").innerHTML =
+                this.responseText;
+            }
+          };
+          xhttp.open("GET", "setLED?LEDstate=" + led, true);
+          xhttp.send();
+          if (led == 1) {
+            $('#myimg').attr('src', "img/TigaLight.jpg");
+            $('#god').attr('src', "img/Tiga.jpg");
+          }
+
+          else {
+            var src = "img/TigaDark.jpg"
+            $('#myimg').attr('src', src);
+          }
+
+        }
+
+        setInterval(function () {
+          // Call a function repetatively with 2 Second interval
+          getData();
+        }, 2000); //2000mSeconds update rate
+
+        function getData() {
+          var xhttp = new XMLHttpRequest();
+          xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+              document.getElementById("ADCValue").innerHTML =
+                this.responseText;
+            }
+          };
+          xhttp.open("GET", "readADC", true);
+          xhttp.send();
+        }
+      </script>
+  </div>
+</body>
+
+</html>
